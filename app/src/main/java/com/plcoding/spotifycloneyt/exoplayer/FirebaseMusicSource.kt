@@ -5,6 +5,7 @@ import android.support.v4.media.MediaBrowserCompat.MediaItem.FLAG_PLAYABLE
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.MediaMetadataCompat.*
+import android.util.Log
 import androidx.core.net.toUri
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -26,6 +27,7 @@ class FirebaseMusicSource @Inject constructor(
                     onReadyListeners.forEach { listener ->
                         listener(state == State.STATE_INITIALIZED)
                     }
+                    Log.d("SONGLOG", "state ready: executing listeners")
                 }
             } else field = value
         }
@@ -37,12 +39,12 @@ class FirebaseMusicSource @Inject constructor(
         val allSongs = musicDatabase.getSongs()
         songsMediaMetadata = allSongs.map { song ->
             MediaMetadataCompat.Builder()
-                .putString(METADATA_KEY_MEDIA_ID, song.mediaId)
+                .putString(METADATA_KEY_MEDIA_ID, song.media_id)
                 .putString(METADATA_KEY_TITLE, song.title)
                 .putString(METADATA_KEY_DISPLAY_TITLE, song.title)
-                .putString(METADATA_KEY_DISPLAY_ICON_URI, song.imageUrl)
-                .putString(METADATA_KEY_ALBUM_ART_URI, song.imageUrl)
-                .putString(METADATA_KEY_MEDIA_URI, song.songUrl)
+                .putString(METADATA_KEY_DISPLAY_ICON_URI, song.image_url)
+                .putString(METADATA_KEY_ALBUM_ART_URI, song.image_url)
+                .putString(METADATA_KEY_MEDIA_URI, song.song_url)
                 .putString(METADATA_KEY_ARTIST, song.artist)
                 .putString(METADATA_KEY_DISPLAY_SUBTITLE, song.artist)
                 .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.artist)
@@ -77,10 +79,13 @@ class FirebaseMusicSource @Inject constructor(
     }.toMutableList()
 
     fun whenReady(action: (Boolean) -> Unit): Boolean {
-        return if (state != State.STATE_CREATED || state != State.STATE_INITIALIZING) {
+        return if (state == State.STATE_CREATED || state == State.STATE_INITIALIZING) {
             onReadyListeners += action
+            Log.d("SONGLOG", "FirebaseMusicSource.whenReady: not ready yet, added to listeners")
             false
         } else {
+            Log.d("SONGLOG", "FirebaseMusicSource.whenReady: READY preparing playback now")
+            Log.d("SONGLOG", "FirebaseMusicSource.whenReady: state : $state")
             action(state == State.STATE_INITIALIZED)
             true
         }

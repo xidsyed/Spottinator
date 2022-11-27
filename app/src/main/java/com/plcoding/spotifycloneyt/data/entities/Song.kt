@@ -1,9 +1,9 @@
 package com.plcoding.spotifycloneyt.data.entities
 
 data class Song(
-    val mediaId: String,
-    val title: String,
-    val artist: String,
-    val songUrl: String,
-    val imageUrl: String
+    val media_id: String = "",
+    val title: String = "",
+    val artist: String = "",
+    val song_url: String = "",
+    val image_url: String = ""
 )

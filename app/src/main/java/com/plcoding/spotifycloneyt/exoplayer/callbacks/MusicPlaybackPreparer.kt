@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.ResultReceiver
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import com.google.android.exoplayer2.ControlDispatcher
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -13,7 +14,7 @@ import com.plcoding.spotifycloneyt.exoplayer.FirebaseMusicSource
 // Interface to which Playback Preparations and actions are delegated
 class MusicPlaybackPreparer(
     private val firebaseMusicSource: FirebaseMusicSource,
-    private val playerPrepared: (MediaMetadataCompat?) -> Unit
+    private val playerPreparedCallback: (MediaMetadataCompat?) -> Unit
 ) : MediaSessionConnector.PlaybackPreparer {
 
     override fun getSupportedPrepareActions(): Long {
@@ -22,14 +23,12 @@ class MusicPlaybackPreparer(
     }
 
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
-        firebaseMusicSource.apply {
-            whenReady {
-                val itemToPlay = songsMediaMetadata.find { mediaId == it.description.mediaId }
-                playerPrepared(itemToPlay)
-            }
+        Log.d("SONGLOG", "preparing song no. $mediaId")
+        firebaseMusicSource.whenReady {
+                val itemToPlay = firebaseMusicSource.songsMediaMetadata.find { mediaId == it.description.mediaId }
+                playerPreparedCallback(itemToPlay)
         }
     }
-
 
     // not needed //
     override fun onCommand(

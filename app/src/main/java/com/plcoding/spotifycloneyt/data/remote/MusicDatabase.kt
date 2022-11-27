@@ -1,5 +1,6 @@
 package com.plcoding.spotifycloneyt.data.remote
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.plcoding.spotifycloneyt.data.entities.Song
 import com.plcoding.spotifycloneyt.other.Constants.SONG_COLLECTION
@@ -12,8 +13,12 @@ class MusicDatabase {
 
     suspend fun getSongs() : List<Song> {
         return try {
-            songCollection.get().await().toObjects(Song::class.java)
+            val list  = songCollection.get().await().toObjects(Song::class.java)
+            Log.d("SONGLOG", "MusicDatabase.getSongs : ${list.size} songs received")
+            return list
         } catch (e : Exception) {
+            Log.d("SONGLOG", "MusicDatabase.getSongs : NO SONGS RECEIVED")
+            Log.d("SONGLOG", "${e.message.toString()}")
             emptyList()
         }
     }

@@ -7,6 +7,11 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import com.plcoding.spotifycloneyt.exoplayer.MusicService
 import com.plcoding.spotifycloneyt.other.Constants.NOTIFICATION_ID
 
+/** We use this class to start and stop foreground music service
+ * A service being in foreground and having a notification is the same thing, cant have one without
+ * the other. That is why `startForeground` takes a notification and stopForeground takes
+ * `removeNotification` Boolean*/
+
 class MusicPlayerNotificationListener(
     private val musicService: MusicService
 ) : PlayerNotificationManager.NotificationListener {
@@ -14,7 +19,7 @@ class MusicPlayerNotificationListener(
         super.onNotificationCancelled(notificationId, dismissedByUser)
         musicService.apply {
             stopForeground(true)
-            isForeground = false
+            isInForeground = false
             stopSelf()
         }
     }
@@ -27,10 +32,10 @@ class MusicPlayerNotificationListener(
         super.onNotificationPosted(notificationId, notification, ongoing)
         musicService.apply {
             // not foreground, start foreground service
-            if (ongoing && !isForeground) {
+            if (ongoing && !isInForeground) {
                 ContextCompat.startForegroundService(this, Intent(applicationContext, this::class.java))
                 startForeground(NOTIFICATION_ID, notification)
-                isForeground = true
+                isInForeground = true
             }
         }
     }
