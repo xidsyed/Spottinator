@@ -5,10 +5,8 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.api.LogDescriptor
 import com.plcoding.spotifycloneyt.R
 import com.plcoding.spotifycloneyt.adapters.SongAdapter
 import com.plcoding.spotifycloneyt.other.Status
@@ -42,7 +40,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun subscribeToObservers() {
-        mainViewModel.mediaItems.observe(viewLifecycleOwner) { result ->
+        mainViewModel.songList.observe(viewLifecycleOwner) { result ->
             when (result.status) {
                 Status.SUCCESS -> {
                     allSongsProgressBar.isVisible = false

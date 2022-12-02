@@ -3,8 +3,6 @@ package com.plcoding.spotifycloneyt.ui.viewmodels
 import android.annotation.SuppressLint
 import android.media.MediaMetadata.METADATA_KEY_MEDIA_ID
 import android.support.v4.media.MediaBrowserCompat
-import android.util.Log
-import androidx.core.net.toUri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,8 +19,8 @@ import com.plcoding.spotifycloneyt.other.Resource
 class MainViewModel @ViewModelInject constructor(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
-    private val _mediaItems = MutableLiveData<Resource<List<Song>>>()
-    val mediaItems: LiveData<Resource<List<Song>>> = _mediaItems
+    private val _songList = MutableLiveData<Resource<List<Song>>>()
+    val songList: LiveData<Resource<List<Song>>> = _songList
 
     val isConnected = musicServiceConnection.isConnected
     val networkError = musicServiceConnection.networkError
@@ -30,7 +28,7 @@ class MainViewModel @ViewModelInject constructor(
     val playbackState = musicServiceConnection.playbackState
 
     init {
-        _mediaItems.postValue(Resource.loading(null))
+        _songList.postValue(Resource.loading(null))
 
         // we get the songs here to _mediaItems
         musicServiceConnection.subscribe(
@@ -41,10 +39,6 @@ class MainViewModel @ViewModelInject constructor(
                     children: MutableList<MediaBrowserCompat.MediaItem>
                 ) {
                     super.onChildrenLoaded(parentId, children)
-                    Log.d(
-                        "SONGLOG",
-                        "MainViewModel.musicServiceConnection.subscribe callback onChildrenLoaded: ${children.size} children loaded"
-                    )
                     val items = children.map {
                         Song(
                             it.mediaId!!,
@@ -54,7 +48,7 @@ class MainViewModel @ViewModelInject constructor(
                             it.description.iconUri.toString(),
                         )
                     }
-                    _mediaItems.postValue(Resource.success(items))
+                    _songList.postValue(Resource.success(items))
                 }
             })
     }
@@ -66,12 +60,10 @@ class MainViewModel @ViewModelInject constructor(
     @SuppressLint("LogNotTimber")
     fun playOrToggleSong(mediaItem: Song, toggle: Boolean = false) {
         val isPrepared = playbackState.value?.isPrepared ?: false
-        Log.d("SONGLOG", "playOrToggleSong: $isPrepared")
         // if player is prepared and you want to play/toggle the song that is already playing/paused
         if (isPrepared && mediaItem.media_id ==
             currPlayingSong.value?.getString(METADATA_KEY_MEDIA_ID)
         ) {
-            Log.d("SONGLOG", "playing same song ${mediaItem.media_id}")
             playbackState.value?.let { playbackState ->
                 when {
                     playbackState.isPlaying -> if (toggle) musicServiceConnection.transportControls.pause()
@@ -80,12 +72,6 @@ class MainViewModel @ViewModelInject constructor(
                 }
             }
         } else { // play a new song
-            Log.d(
-                "SONGLOG",
-                "playing new song ${mediaItem.media_id} not the curr playing song ${
-                    currPlayingSong.value?.getString(METADATA_KEY_MEDIA_ID)
-                }"
-            )
             musicServiceConnection.transportControls.playFromMediaId(mediaItem.media_id, null)
         }
     }

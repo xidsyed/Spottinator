@@ -11,7 +11,7 @@
         android:id="@+id/flFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/vpSong"
+        app:layout_constraintBottom_toTopOf="@id/swipeViewContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,35 +23,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph"
-            />
+            app:navGraph="@navigation/nav_graph" />
 
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/ivCurSongImage"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:scaleType="centerCrop"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/swipeViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpSong"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
         android:background="@color/darkBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivPlayPause"
-        app:layout_constraintStart_toEndOf="@+id/ivCurSongImage" />
+        android:paddingVertical="16dp">
 
-    <ImageView
-        android:id="@+id/ivPlayPause"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:background="@color/darkBackground"
-        android:src="@drawable/ic_play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
+            android:id="@+id/ivCurSongImage"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerCrop"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpSong"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@color/darkBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPlayPause"
+            app:layout_constraintStart_toEndOf="@+id/ivCurSongImage" />
+
+        <ImageView
+            android:id="@+id/ivPlayPause"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@color/darkBackground"
+            android:src="@drawable/ic_play"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

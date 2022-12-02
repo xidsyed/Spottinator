@@ -9,6 +9,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import androidx.media.MediaBrowserServiceCompat
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
@@ -130,7 +131,10 @@ class MusicService : MediaBrowserServiceCompat() {
                 val resultsSent = firebaseMusicSource.whenReady { isMusicSourceInitialised ->
                     if (isMusicSourceInitialised) {
                         result.sendResult(firebaseMusicSource.asMediaItems())
-                        Log.d("SONGLOG", "MusicService.onLoadChildren : ${firebaseMusicSource.songsMediaMetadata.size} songs  sent")
+                        Log.d(
+                            "SONGLOG",
+                            "MusicService.onLoadChildren : ${firebaseMusicSource.songsMediaMetadata.size} songs  sent"
+                        )
                         if (!isPlayerInitialised && firebaseMusicSource.songsMediaMetadata.isNotEmpty()) {
                             preparePlayer(
                                 firebaseMusicSource.songsMediaMetadata,

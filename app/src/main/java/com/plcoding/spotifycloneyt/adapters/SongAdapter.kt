@@ -30,7 +30,5 @@ class SongAdapter @Inject constructor(
                 }
             }
         }
-
     }
-
 }
