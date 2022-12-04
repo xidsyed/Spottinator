@@ -2,6 +2,7 @@ package com.plcoding.spotifycloneyt.ui
 
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -62,6 +63,9 @@ class MainActivity : AppCompatActivity() {
                 else -> showBottomBar()
             }
         }
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun setupViewPager() {
@@ -157,12 +161,14 @@ class MainActivity : AppCompatActivity() {
         ivCurSongImage.isVisible = false
         vpSong.isVisible = false
         ivPlayPause.isVisible = false
+        swipeViewContainer.isVisible = false
     }
 
     private fun showBottomBar() {
         ivCurSongImage.isVisible = true
         vpSong.isVisible = true
         ivPlayPause.isVisible = true
+        swipeViewContainer.isVisible = true
     }
 
 }

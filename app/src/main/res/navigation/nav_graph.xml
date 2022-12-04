@@ -14,5 +14,8 @@
         android:label="SongFragment" />
 
     <action android:id="@+id/globalActionToSongFragment"
-        app:destination="@id/songFragment"/>
+        app:destination="@id/songFragment"
+        app:enterAnim="@anim/slide_up"
+        app:popExitAnim="@anim/fade_out"
+        />
 </navigation>
