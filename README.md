@@ -13,4 +13,5 @@ MediaBrowserService is used to play music along with a MediaBrowser to control t
 
 ### Demo
 Watch a demo of the app in action:
+
 https://user-images.githubusercontent.com/26184016/205516994-67f4e4e0-154d-432a-8cb8-61ab7858e6c8.mp4
